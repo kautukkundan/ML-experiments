@@ -1,3 +1,4 @@
+import warnings
 import pandas as pd
 import quandl
 import math
@@ -6,7 +7,9 @@ from sklearn import preprocessing, model_selection, svm
 from sklearn.linear_model import LinearRegression 
 import matplotlib.pyplot as plt
 import pickle
+from sklearn.model_selection import train_test_split
 
+warnings.filterwarnings('ignore')
 
 df = quandl.get('WIKI/GOOGL')
 
@@ -28,11 +31,11 @@ df['label'] = df[forecast_col].shift(-forecast_out) #predicts 10 day aage ki val
 df.dropna(inplace=True)
 
 X = np.array(df.drop(['label'], 1))
-y = np.array(df['label'])
+Y = np.array(df['label'])
 
 #X = preprocessing.scale(X)
 
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, y, test_size=0.2)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
 # clf = LinearRegression()
 
@@ -46,7 +49,7 @@ clf = pickle.load(pickle_in)
 
 accuracy = clf.score(X_test, Y_test)
 
-print(accuracy)
+print("The accuracy is: ",accuracy)
 
 #######################################################
 
